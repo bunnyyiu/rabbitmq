@@ -277,4 +277,10 @@ if [ "$haveSslConfig" ] && [ -f "$combinedSsl" ]; then
 	export RABBITMQ_CTL_ERL_ARGS="$RABBITMQ_SERVER_ADDITIONAL_ERL_ARGS"
 fi
 
+if [ "${INJECT_SEARCH_DOMAIN:-}" ]; then
+    command="$',s/search /search $INJECT_SEARCH_DOMAIN /g\nw'"
+    edCommand="ed -s /etc/resolv.conf <<< $command"
+    bash -c "$edCommand"
+fi
+
 exec "$@"
